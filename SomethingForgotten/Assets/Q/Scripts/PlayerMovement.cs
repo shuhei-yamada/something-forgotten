@@ -4,16 +4,24 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public bool CanGoal;
     public float MoveSpeed = 5f;
     Vector3 Movement;
     Rigidbody PlayerRigidbody;
 
     void Start()
     {
-       PlayerRigidbody = GetComponent<Rigidbody>();
+        PlayerRigidbody = GetComponent<Rigidbody>();
+        Init();
     }
 
-    void FixedUpdate()
+    public void Init()
+    {
+        CanGoal = false;
+
+    }
+
+    void Update()
     {
         float HorizontalInput = Input.GetAxisRaw("Horizontal");
         float VerticalInput = Input.GetAxisRaw("Vertical");
@@ -26,5 +34,18 @@ public class PlayerMovement : MonoBehaviour
         Movement.Set(HorizontalInput,0,VerticalInput);
         Movement = Movement.normalized * MoveSpeed * Time.deltaTime;
         PlayerRigidbody.MovePosition(transform.position + Movement);
+    }
+
+    private void OnTriggerEnter(Collider other){
+        if(other.tag == "ForgottenObject")
+        {
+            CanGoal = true;
+            Destroy(other.gameObject);
+        }
+
+        if(other.tag == "Goal" && CanGoal)
+        {
+			Debug.Log("GameClear");
+        }
     }
 }
