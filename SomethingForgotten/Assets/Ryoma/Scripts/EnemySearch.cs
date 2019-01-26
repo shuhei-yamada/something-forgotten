@@ -143,7 +143,12 @@ public class EnemySearch : MonoBehaviour
 
 		public void UpdateProcess()
 		{
-			timeCount += Time.deltaTime;
+
+			if (navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance)
+			{
+				timeCount += Time.deltaTime;
+			}
+
 			if (timeCount >= nextPosInterval)
 			{
 				timeCount = 0;
@@ -180,6 +185,8 @@ public class EnemySearch : MonoBehaviour
 			navMeshAgent.updatePosition = false;
 			navMeshAgent.updateRotation = false;
 			navMeshAgent.updateUpAxis = false;
+
+			bool isSet = navMeshAgent.SetDestination(wanderPoint[0].position);
 		}
 	}
 	[SerializeField] private Wander wander;
