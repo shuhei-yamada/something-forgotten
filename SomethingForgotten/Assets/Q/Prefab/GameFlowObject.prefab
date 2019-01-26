@@ -125,6 +125,7 @@ MonoBehaviour:
   StartPanel: {fileID: 862521007241056311}
   GameOverPanel: {fileID: 862521007505453329}
   GameOverMessage: {fileID: 862521008170223469}
+  MaxForGottenObject: 3
   GameClearMessage: {fileID: 4440107710129222350}
 --- !u!1 &2016411626
 GameObject:

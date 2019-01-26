@@ -18,14 +18,18 @@ public class GameController : MonoBehaviour
 	public GameObject StartPanel;
 	public GameObject GameOverPanel;
 	public Text GameOverMessage;
+	public int MaxForGottenObject = 3;
+	int ForGottenObject;
+
 	public Text GameClearMessage;
 
 	private bool _canStart = true;
 	private bool _canRestart = false;
 
+
 	void Awake()
 	{
-		mInstance = this;
+		mInstance = this;   
 	}
 
 	void Start()
@@ -33,6 +37,7 @@ public class GameController : MonoBehaviour
 		GameReady();
 	}
 
+	// Update is called once per frame
 	void Update()
 	{
 		if (_canStart && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.Joystick1Button0)))
