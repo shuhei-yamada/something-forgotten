@@ -6,10 +6,11 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent), typeof(Rigidbody))]
 public class EnemySearch : MonoBehaviour
 {
-	// Variable ////////////////////////////////////////////
+	// Variable ////////////////////////////////////////////////////
 	public float movePower = 3f;
 	public float maxSpeed = 3f;
 
+	public float rayDistance = 10f;
 
 	// UseOtherConponents
 	[SerializeField] private Rigidbody rigid;
@@ -18,16 +19,13 @@ public class EnemySearch : MonoBehaviour
 	IEnemyUpdate process;
 
 
-
-
-	// Methods /////////////////////////////////////////////
-
+	// Methods ////////////////////////////////////////////////////
 	private void Start()
 	{
-		if (wander.navMeshAgent == null) { wander.navMeshAgent = GetComponent<NavMeshAgent>(); }
 		if (rigid == null) { rigid = GetComponent<Rigidbody>(); }
 
-		SetupNavMeshAgent();
+		// GetComponent<NavMeshAgent> と 物理演算で動くように設定
+		wander.Initialize(transform);
 
 		// 始めはうろつく
 		process = wander;
@@ -36,6 +34,8 @@ public class EnemySearch : MonoBehaviour
 	private void Update()
 	{
 		process.UpdateProcess();
+
+		LookupDetection();
 	}
 
 	// Characterを物理演算によって移動する
@@ -62,9 +62,10 @@ public class EnemySearch : MonoBehaviour
 			}
 			rigid.velocity = rigVel;
 
+			// 目的地の近く以外では移動方向に向ける。目的地近くではあらぶりやすいので向きを変えない
 			if (wander.navMeshAgent.remainingDistance > wander.navMeshAgent.stoppingDistance)
 			{
-				transform.LookAt(transform.position + wander.navMeshAgent.velocity * 100, Vector3.up);
+				transform.LookAt(transform.position + wander.navMeshAgent.velocity * rayDistance, Vector3.up);
 			}
 		}
 		// navMeshAgentの計算上の位置とRigidbodyで動かしている実際の位置が違うので
@@ -72,12 +73,52 @@ public class EnemySearch : MonoBehaviour
 		wander.navMeshAgent.nextPosition = transform.position;
 	}
 
-	private void SetupNavMeshAgent()
+	private void LookupDetection()
 	{
-		wander.navMeshAgent.updatePosition = false;
-		wander.navMeshAgent.updateRotation = false;
-		wander.navMeshAgent.updateUpAxis = false;
+		IsHitRay(transform.position, transform.forward);
 	}
+
+	/// <summary>
+	/// Rayを飛ばしてプレイヤーに当たったらTrueを返す処理
+	/// </summary>
+	/// <param name="origin">発射地点</param>
+	/// <param name="direction">向き</param>
+	/// <returns></returns>
+	private bool IsHitRay(Vector3 origin, Vector3 direction)
+	{
+		//Rayの作成　　　↓Rayを飛ばす原点　　↓Rayを飛ばす方向
+		var ray = new Ray(origin, direction);
+
+		//Rayが当たったオブジェクトの情報を入れる箱
+		RaycastHit hit;
+
+		//もしRayにオブジェクトが衝突したら
+		//                  ↓Ray  ↓Rayが当たったオブジェクト ↓距離
+		if (Physics.Raycast(ray, out hit, rayDistance))
+		{
+			//Rayが当たったオブジェクトのtagがPlayerだったら
+			if (hit.collider.tag == "Player")
+			{
+				#if UNITY_EDITOR
+				Debug.Log("RayがPlayerに当たった");
+				Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red);
+				#endif
+				return true;
+			}
+			#if UNITY_EDITOR
+			else
+			{
+				Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+			}
+		}
+		else
+		{
+			Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.blue);
+			#endif
+		}
+		return false;
+	}
+	
 
 
 	// Inner Class
@@ -86,8 +127,8 @@ public class EnemySearch : MonoBehaviour
 		void UpdateProcess();
 	}
 
-
-	#region WanderClass
+	// jam用に簡易的に作っておく。本来はステートPatternをもっとしっかり組んだ方が良い
+#region WanderClass
 	[System.Serializable]
 	public class Wander : IEnemyUpdate
 	{
@@ -130,7 +171,17 @@ public class EnemySearch : MonoBehaviour
 				Debug.Log(navMeshAgent.transform.name + " は今NavMesh上にいません");
 			}
 		}
+
+		public void Initialize(Transform transform)
+		{
+			// RequireComponentしてるので必ずある
+			navMeshAgent = transform.GetComponent<NavMeshAgent>();
+			if (navMeshAgent == null) { Debug.LogError(transform.name + " はnavMeshAgentがありません"); }
+			navMeshAgent.updatePosition = false;
+			navMeshAgent.updateRotation = false;
+			navMeshAgent.updateUpAxis = false;
+		}
 	}
 	[SerializeField] private Wander wander;
-	#endregion Wander
+#endregion Wander
 }

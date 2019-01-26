@@ -5,12 +5,14 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float MoveSpeed = 5f;
+	int GetObjectNum;
     Vector3 Movement;
     Rigidbody PlayerRigidbody;
 
     void Start()
     {
         PlayerRigidbody = GetComponent<Rigidbody>();
+		GetObjectNum = 0;
     }
 
     void Update()
@@ -32,8 +34,12 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         if(other.tag == "ForgottenObject")
         {
-			GameController.Instance.GameClear();
-            // Destroy(other.gameObject);
+			GetObjectNum++;
+			if(GetObjectNum >= GameController.Instance.MaxForGottenObject)
+			{
+				GameController.Instance.GameClear();
+			}
+            Destroy(other.gameObject);
         }
     }
 }
