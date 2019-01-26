@@ -10,10 +10,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-       PlayerRigidbody = GetComponent<Rigidbody>();
+        PlayerRigidbody = GetComponent<Rigidbody>();
     }
 
-    void FixedUpdate()
+    void Update()
     {
         float HorizontalInput = Input.GetAxisRaw("Horizontal");
         float VerticalInput = Input.GetAxisRaw("Vertical");
@@ -26,5 +26,13 @@ public class PlayerMovement : MonoBehaviour
         Movement.Set(HorizontalInput,0,VerticalInput);
         Movement = Movement.normalized * MoveSpeed * Time.deltaTime;
         PlayerRigidbody.MovePosition(transform.position + Movement);
+    }
+
+    private void OnTriggerEnter(Collider other){
+        if(other.tag == "ForgottenObject")
+        {
+			GameController.Instance.GameClear();
+            // Destroy(other.gameObject);
+        }
     }
 }
