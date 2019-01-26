@@ -18,6 +18,8 @@ public class GameController : MonoBehaviour
     public GameObject StartPanel;
     public GameObject GameOverPanel;
     public Text GameOverMessage;
+    public int MaxForGottenObject = 3;
+    int ForGottenObject;
 
     void Awake()
     {
