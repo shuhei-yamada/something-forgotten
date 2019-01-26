@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public bool CanGoal;
     public float MoveSpeed = 5f;
     Vector3 Movement;
     Rigidbody PlayerRigidbody;
@@ -12,13 +11,6 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         PlayerRigidbody = GetComponent<Rigidbody>();
-        Init();
-    }
-
-    public void Init()
-    {
-        CanGoal = false;
-
     }
 
     void Update()
@@ -39,13 +31,8 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         if(other.tag == "ForgottenObject")
         {
-            CanGoal = true;
-            Destroy(other.gameObject);
-        }
-
-        if(other.tag == "Goal" && CanGoal)
-        {
-			Debug.Log("GameClear");
+			GameController.Instance.GameClear();
+            // Destroy(other.gameObject);
         }
     }
 }
