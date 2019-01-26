@@ -445,7 +445,7 @@ PrefabInstance:
     - target: {fileID: 862521006816213225, guid: 29ee24486ed53ae478566a93ffe7b6ab,
         type: 3}
       propertyPath: m_Name
-      value: UI
+      value: GameFlowObject
       objectReference: {fileID: 0}
     - target: {fileID: 862521006816213237, guid: 29ee24486ed53ae478566a93ffe7b6ab,
         type: 3}
