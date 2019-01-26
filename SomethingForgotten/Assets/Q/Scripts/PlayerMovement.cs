@@ -15,10 +15,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+		/* 
         float HorizontalInput = Input.GetAxisRaw("Horizontal");
         float VerticalInput = Input.GetAxisRaw("Vertical");
 
-        Move(HorizontalInput,VerticalInput);
+        Move(HorizontalInput,VerticalInput);*/
     }
 
     void Move(float HorizontalInput,float VerticalInput)
