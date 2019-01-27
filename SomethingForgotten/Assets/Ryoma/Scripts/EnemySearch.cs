@@ -71,12 +71,10 @@ public class EnemySearch : MonoBehaviour
 			// 目的地の近く以外では移動方向に向ける。
 			if (wander.navMeshAgent.remainingDistance > wander.navMeshAgent.stoppingDistance)
 			{
-				Debug.Log("remain > stopDis");
 				transform.LookAt(transform.position + wander.navMeshAgent.velocity * rayDistance, Vector3.up);
 			}
 			else
 			{
-				Debug.Log("<=");
 				// 目的地の近くでは速度を下げて、角度を回転させない。目的地近くではあらぶりやすいため
 				rigid.velocity = rigid.velocity / 2f;
 				rigid.angularVelocity = Vector3.zero;
@@ -183,12 +181,10 @@ public class EnemySearch : MonoBehaviour
 
 		public void UpdateProcess()
 		{
-			Debug.Log("UpdateProcess");
 			// 目的地に近づいたら歩くアニメーションを止めてインターバルに入る
 			if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
 			{
 				timeCount += Time.deltaTime;
-				Debug.Log("timeCount");
 				if ( !isHuman )
 				{
 					if (animator.GetBool(walkingID)) { animator.SetBool(walkingID, false); }
@@ -200,13 +196,11 @@ public class EnemySearch : MonoBehaviour
 			{
 				timeCount = 0;
 				SetNextPosition();
-				Debug.Log("SetDestinaion");
 				if (!isHuman)
 				{
 					if (!animator.GetBool(walkingID)) { animator.SetBool(walkingID, true); }
 				}
 			}
-			Debug.Log("UpdateProcessEnd");
 		}
 
 		public void SetNextPosition()
@@ -231,7 +225,7 @@ public class EnemySearch : MonoBehaviour
 
 		public void Initialize(Transform transform)
 		{
-			if (animator == null) { animator = transform.GetComponent<Animator>(); }
+			animator = transform.GetComponent<Animator>();
 			walkingID = Animator.StringToHash("IsWalking");
 			moveSpeedID = Animator.StringToHash("MoveSpeed");
 			isHuman = animator.isHuman;
