@@ -26,6 +26,7 @@ public class GameController : MonoBehaviour
 	private bool _canStart = true;
 	private bool _canRestart = false;
 
+	private SoundManager _soundManager;
 
 	void Awake()
 	{
@@ -35,6 +36,7 @@ public class GameController : MonoBehaviour
 	void Start()
 	{
 		GameReady();
+		_soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 	}
 
 	// Update is called once per frame
@@ -42,12 +44,14 @@ public class GameController : MonoBehaviour
 	{
 		if (_canStart && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.Joystick1Button0)))
 		{
+			_soundManager.PlaySe(SoundManager.SeType.ButtonPush);
 			GameStart();
 			_canStart = false;
 		}
 
 		if (_canRestart && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.Joystick1Button0)))
 		{
+			_soundManager.PlaySe(SoundManager.SeType.ButtonPush);
 			GameRestart();
 			_canRestart = false;
 		}
@@ -55,6 +59,7 @@ public class GameController : MonoBehaviour
 
 	public void GameOver()
 	{
+		_soundManager.PlaySe(SoundManager.SeType.GameOver);
 		Time.timeScale = 0;
 		GameOverPanel.SetActive(true);
 		GameOverMessage.gameObject.SetActive(true);
@@ -64,6 +69,7 @@ public class GameController : MonoBehaviour
 
 	public void GameClear()
 	{
+		_soundManager.PlaySe(SoundManager.SeType.GameClear);
 		Time.timeScale = 0;
 		StartPanel.SetActive(false);
 		GameOverPanel.SetActive(true);
