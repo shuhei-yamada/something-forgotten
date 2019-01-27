@@ -34,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         if(other.tag == "ForgottenObject")
         {
+			GameController.Instance.PlayForgottenObjectGetSe();
 			GetObjectNum++;
 			if(GetObjectNum >= GameController.Instance.MaxForGottenObject)
 			{

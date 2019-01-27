@@ -7,8 +7,11 @@ public class SoundManager : MonoBehaviour
 {
 
 #pragma warning disable 649
+	[SerializeField] private AudioSource _audioSource1;
+	[SerializeField] private AudioSource _audioSource2;
 	[SerializeField] private AudioClip _buttonPushAudioClip;
-	[SerializeField] private AudioClip _getAudioClip;
+	[SerializeField] private AudioClip _forgottenObjectGetAudioClip;
+	[SerializeField] private AudioClip _itemGetAudioClip;
 	[SerializeField] private AudioClip _clearAudioClip;
 	[SerializeField] private AudioClip _gameOverAudioClip;
 #pragma warning restore 649
@@ -16,16 +19,10 @@ public class SoundManager : MonoBehaviour
 	public enum SeType
 	{
 		ButtonPush,
+		ForgottenObjectGet,
 		ItemGet,
 		GameClear,
 		GameOver,
-	}
-
-	private AudioSource _audioSource;
-
-	void Start()
-	{
-		_audioSource = GetComponent<AudioSource>();
 	}
 
 	public void PlaySe(SeType type)
@@ -33,16 +30,19 @@ public class SoundManager : MonoBehaviour
 		switch (type)
 		{
 			case SeType.ButtonPush:
-				_audioSource.PlayOneShot(_buttonPushAudioClip);
+				_audioSource1.PlayOneShot(_buttonPushAudioClip);
+				break;
+			case SeType.ForgottenObjectGet:
+				_audioSource1.PlayOneShot(_forgottenObjectGetAudioClip);
 				break;
 			case SeType.ItemGet:
-				_audioSource.PlayOneShot(_getAudioClip);
+				_audioSource1.PlayOneShot(_itemGetAudioClip);
 				break;
 			case SeType.GameClear:
-				_audioSource.PlayOneShot(_clearAudioClip);
+				_audioSource2.PlayOneShot(_clearAudioClip);
 				break;
 			case SeType.GameOver:
-				_audioSource.PlayOneShot(_gameOverAudioClip);
+				_audioSource2.PlayOneShot(_gameOverAudioClip);
 				break;
 		}
 	}
