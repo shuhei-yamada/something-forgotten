@@ -36,11 +36,14 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         if(other.tag == "ForgottenObject")
         {
-			GameController.Instance.PlaySe(SoundManager.SeType.ForgottenObjectGet);
 			GetObjectNum++;
 			if(GetObjectNum >= GameController.Instance.MaxForGottenObject)
 			{
 				GameController.Instance.GameClear();
+			}
+			else
+			{
+				GameController.Instance.PlaySe(SoundManager.SeType.ForgottenObjectGet);
 			}
             Destroy(other.gameObject);
         }
