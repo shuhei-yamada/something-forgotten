@@ -278,15 +278,20 @@ PrefabInstance:
       propertyPath: maxSpeed
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 2530630821431343699, guid: bdce773ef83c54342b78c11b62c80189,
+        type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 870082152262573900, guid: bdce773ef83c54342b78c11b62c80189,
         type: 3}
       propertyPath: maxSpeed
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 870082152262573900, guid: bdce773ef83c54342b78c11b62c80189,
         type: 3}
       propertyPath: movePower
-      value: 15
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 870082152262573900, guid: bdce773ef83c54342b78c11b62c80189,
         type: 3}
@@ -1295,10 +1300,25 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 6254947008381939543, guid: 056322193a03a40f7abaca15144802ef,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 126
+      objectReference: {fileID: 0}
+    - target: {fileID: 4100589438947661455, guid: 056322193a03a40f7abaca15144802ef,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4787388787680270407, guid: 056322193a03a40f7abaca15144802ef,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 126
+      objectReference: {fileID: 0}
     - target: {fileID: 9022905205321660138, guid: 056322193a03a40f7abaca15144802ef,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 056322193a03a40f7abaca15144802ef, type: 3}
