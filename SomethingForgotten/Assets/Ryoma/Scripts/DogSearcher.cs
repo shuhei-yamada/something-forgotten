@@ -7,13 +7,15 @@ using UnityEngine.AI;
 public class DogSearcher : EnemySearch
 {
 	// Variable ////////////////////////////////////////////////////
-	WaitForSeconds waitForSeconds = new WaitForSeconds(8f);
+	[SerializeField] private float boneEffectTime = 8f;
+	WaitForSeconds waitForSeconds;
 
 	// Methods ////////////////////////////////////////////////////
 	protected override void Start()
 	{
 		base.Start();
 		goToBone.Initialize(transform);
+		waitForSeconds = new WaitForSeconds(boneEffectTime);
 	}
 
 	private void OnTriggerEnter(Collider other)
