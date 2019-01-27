@@ -127,6 +127,7 @@ MonoBehaviour:
   GameOverMessage: {fileID: 862521008170223469}
   MaxForGottenObject: 3
   GameClearMessage: {fileID: 4440107710129222350}
+  PressButtonMessage: {fileID: 1005641079051796995}
 --- !u!1 &2016411626
 GameObject:
   m_ObjectHideFlags: 0
@@ -1272,7 +1273,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7920830732389382073
 RectTransform:
   m_ObjectHideFlags: 0

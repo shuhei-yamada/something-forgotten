@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,9 +24,11 @@ public class GameController : MonoBehaviour
 	int ForGottenObject;
 
 	public Text GameClearMessage;
+	public Text PressButtonMessage;
 
 	private bool _canStart = true;
 	private bool _canRestart = false;
+	private bool _isDuringPlay = false;
 
 	private SoundManager _soundManager;
 
@@ -59,12 +63,24 @@ public class GameController : MonoBehaviour
 
 	public void GameOver()
 	{
+		if (!_isDuringPlay)
+		{
+			return;
+		}
+
+		Debug.Log("GameOver");
+
+		_isDuringPlay = false;
 		_soundManager.PlaySe(SoundManager.SeType.GameOver);
 		Time.timeScale = 0;
 		GameOverPanel.SetActive(true);
 		GameOverMessage.gameObject.SetActive(true);
 		GameClearMessage.gameObject.SetActive(false);
-		_canRestart = true;
+		Observable.Interval(TimeSpan.FromSeconds(1)).Subscribe(_ =>
+		{
+			PressButtonMessage.gameObject.SetActive(true);
+			_canRestart = true;
+		});
 	}
 
 	public void GameClear()
@@ -75,7 +91,11 @@ public class GameController : MonoBehaviour
 		GameOverPanel.SetActive(true);
 		GameOverMessage.gameObject.SetActive(false);
 		GameClearMessage.gameObject.SetActive(true);
-		_canRestart = true;
+		Observable.Timer(TimeSpan.FromSeconds(1)).TakeUntilDestroy(this).Subscribe(_ =>
+		{
+			PressButtonMessage.gameObject.SetActive(true);
+			_canRestart = true;
+		});
 	}
 
 	public void GameReady()
@@ -90,6 +110,7 @@ public class GameController : MonoBehaviour
 		Time.timeScale = 1;
 		StartPanel.SetActive(false);
 		GameOverPanel.SetActive(false);
+		_isDuringPlay = true;
 	}
 
 	public void GameRestart()
