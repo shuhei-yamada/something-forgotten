@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movePower: 3
-  maxSpeed: 3
+  maxSpeed: 2
   rayDistance: 10
   rigid: {fileID: 3464160875179793398}
   wander:
@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movePower: 3
-  maxSpeed: 3
+  maxSpeed: 2
   rayDistance: 10
   rigid: {fileID: 3208904356358017671}
   wander:
@@ -459,8 +459,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ca757eca0f458a4786e3c55c3a62b3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movePower: 3
-  maxSpeed: 3
+  movePower: 5
+  maxSpeed: 6
   rayDistance: 10
   rigid: {fileID: 616982848900690470}
   wander:
@@ -616,8 +616,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ca757eca0f458a4786e3c55c3a62b3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movePower: 3
-  maxSpeed: 3
+  movePower: 5
+  maxSpeed: 4
   rayDistance: 10
   rigid: {fileID: 7301861260399114236}
   wander:

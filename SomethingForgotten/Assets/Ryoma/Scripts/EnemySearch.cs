@@ -67,6 +67,11 @@ public class EnemySearch : MonoBehaviour
 			{
 				transform.LookAt(transform.position + wander.navMeshAgent.velocity * rayDistance, Vector3.up);
 			}
+			else
+			{
+				rigid.velocity = rigid.velocity / 2f;
+				rigid.angularVelocity = Vector3.zero;
+			}
 		}
 		// navMeshAgentの計算上の位置とRigidbodyで動かしている実際の位置が違うので
 		// 次のナビメッシュの計算位置をリセットする
@@ -143,8 +148,13 @@ public class EnemySearch : MonoBehaviour
 
 		public void UpdateProcess()
 		{
-			timeCount += Time.deltaTime;
-			if (timeCount >= nextPosInterval)
+
+			if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+			{
+				timeCount += Time.deltaTime;
+			}
+
+			if (timeCount > nextPosInterval)
 			{
 				timeCount = 0;
 				SetNextPosition();
@@ -180,6 +190,8 @@ public class EnemySearch : MonoBehaviour
 			navMeshAgent.updatePosition = false;
 			navMeshAgent.updateRotation = false;
 			navMeshAgent.updateUpAxis = false;
+
+			bool isSet = navMeshAgent.SetDestination(wanderPoint[0].position);
 		}
 	}
 	[SerializeField] private Wander wander;
