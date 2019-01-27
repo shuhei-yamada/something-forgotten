@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ForgottenObject
   - Goal
+  - Bone
   layers:
   - Default
   - TransparentFX

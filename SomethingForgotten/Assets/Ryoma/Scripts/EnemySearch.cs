@@ -11,16 +11,16 @@ public class EnemySearch : MonoBehaviour
 	public float maxSpeed = 3f;
 
 	public float rayDistance = 10f;
+	protected bool raycastEnabled = true;
 
 	// UseOtherConponents
 	[SerializeField] private Rigidbody rigid;
 
 	// AIUpdate
-	IEnemyUpdate process;
-
+	protected IEnemyUpdate process;
 
 	// Methods ////////////////////////////////////////////////////
-	private void Start()
+	protected virtual void Start()
 	{
 		if (rigid == null) { rigid = GetComponent<Rigidbody>(); }
 
@@ -31,15 +31,21 @@ public class EnemySearch : MonoBehaviour
 		process = wander;
 	}
 
-	private void Update()
+	protected virtual void Update()
 	{
 		process.UpdateProcess();
 
 		LookupDetection();
+
+		if ( wander.isHuman )
+		{
+			AnimationUpdate();
+		}
+
 	}
 
 	// Characterを物理演算によって移動する
-	private void FixedUpdate()
+	protected virtual void FixedUpdate()
 	{
 
 		if (wander.navMeshAgent.enabled)
@@ -62,13 +68,16 @@ public class EnemySearch : MonoBehaviour
 			}
 			rigid.velocity = rigVel;
 
-			// 目的地の近く以外では移動方向に向ける。目的地近くではあらぶりやすいので向きを変えない
+			// 目的地の近く以外では移動方向に向ける。
 			if (wander.navMeshAgent.remainingDistance > wander.navMeshAgent.stoppingDistance)
 			{
+				Debug.Log("remain > stopDis");
 				transform.LookAt(transform.position + wander.navMeshAgent.velocity * rayDistance, Vector3.up);
 			}
 			else
 			{
+				Debug.Log("<=");
+				// 目的地の近くでは速度を下げて、角度を回転させない。目的地近くではあらぶりやすいため
 				rigid.velocity = rigid.velocity / 2f;
 				rigid.angularVelocity = Vector3.zero;
 			}
@@ -80,7 +89,18 @@ public class EnemySearch : MonoBehaviour
 
 	private void LookupDetection()
 	{
-		IsHitRay(transform.position, transform.forward);
+		// raycastEnabledでチェック有無を決める。犬が骨に夢中になっているとき用
+		if ( !raycastEnabled ) { return; }
+
+		// Raycast を飛ばしてチェックする
+		bool isHit = IsHitRay(transform.position, transform.forward);
+
+		if (isHit)
+		{
+			var gameContoller = GameObject.Find("GameController").GetComponent<GameController>();
+
+			gameContoller.GameOver();
+		}
 	}
 
 	/// <summary>
@@ -89,8 +109,13 @@ public class EnemySearch : MonoBehaviour
 	/// <param name="origin">発射地点</param>
 	/// <param name="direction">向き</param>
 	/// <returns></returns>
-	private bool IsHitRay(Vector3 origin, Vector3 direction)
+	private bool IsHitRay(Vector3 _origin, Vector3 direction)
 	{
+		Vector3 origin = _origin;
+		// rayを飛ばす原点の高さを1に固定する。
+		// キャラによって原点が違う。例えば犬は原点が地面にある
+		origin.y = -1f;
+
 		//Rayの作成　　　↓Rayを飛ばす原点　　↓Rayを飛ばす方向
 		var ray = new Ray(origin, direction);
 
@@ -105,7 +130,6 @@ public class EnemySearch : MonoBehaviour
 			if (hit.collider.tag == "Player")
 			{
 				#if UNITY_EDITOR
-				Debug.Log("RayがPlayerに当たった");
 				Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red);
 				#endif
 				return true;
@@ -123,11 +147,15 @@ public class EnemySearch : MonoBehaviour
 		}
 		return false;
 	}
-	
+
+	void AnimationUpdate()
+	{
+		wander.animator.SetFloat(wander.moveSpeedID, wander.navMeshAgent.velocity.magnitude);
+	}
 
 
 	// Inner Class
-	interface IEnemyUpdate
+	protected interface IEnemyUpdate
 	{
 		void UpdateProcess();
 	}
@@ -145,20 +173,40 @@ public class EnemySearch : MonoBehaviour
 		[SerializeField] private Transform[] wanderPoint;
 		private int pointIndex = 0;
 
+		public Animator animator;
+		private int walkingID;
+		// humanの歩く
+		[HideInInspector] public int moveSpeedID;
+		// dog の歩く
+		[HideInInspector] public bool isHuman;
+
 
 		public void UpdateProcess()
 		{
-
+			Debug.Log("UpdateProcess");
+			// 目的地に近づいたら歩くアニメーションを止めてインターバルに入る
 			if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
 			{
 				timeCount += Time.deltaTime;
+				Debug.Log("timeCount");
+				if ( !isHuman )
+				{
+					if (animator.GetBool(walkingID)) { animator.SetBool(walkingID, false); }
+				}
 			}
 
+			// インターバルから抜けて歩き始める
 			if (timeCount > nextPosInterval)
 			{
 				timeCount = 0;
 				SetNextPosition();
+				Debug.Log("SetDestinaion");
+				if (!isHuman)
+				{
+					if (!animator.GetBool(walkingID)) { animator.SetBool(walkingID, true); }
+				}
 			}
+			Debug.Log("UpdateProcessEnd");
 		}
 
 		public void SetNextPosition()
@@ -172,7 +220,6 @@ public class EnemySearch : MonoBehaviour
 			// エージェントがナビメッシュ上にいる場合、行先を設定
 			if (navMeshAgent.isOnNavMesh)
 			{
-				
 				bool isSet = navMeshAgent.SetDestination(wanderPoint[pointIndex].position);
 				if (!isSet) { Debug.LogError(navMeshAgent.transform.name + " はナビメッシュError:目的地が設定できませんでした.\nWanderPointを確認してください"); }
 			}
@@ -184,6 +231,21 @@ public class EnemySearch : MonoBehaviour
 
 		public void Initialize(Transform transform)
 		{
+			if (animator == null) { animator = transform.GetComponent<Animator>(); }
+			walkingID = Animator.StringToHash("IsWalking");
+			moveSpeedID = Animator.StringToHash("MoveSpeed");
+			isHuman = animator.isHuman;
+
+			// 犬と人で分岐
+			if (isHuman)
+			{
+				animator.SetBool("Grounded", true);
+			}
+			else
+			{
+				animator.SetBool(walkingID, true);
+			}
+
 			// RequireComponentしてるので必ずある
 			navMeshAgent = transform.GetComponent<NavMeshAgent>();
 			if (navMeshAgent == null) { Debug.LogError(transform.name + " はnavMeshAgentがありません"); }
@@ -194,6 +256,6 @@ public class EnemySearch : MonoBehaviour
 			bool isSet = navMeshAgent.SetDestination(wanderPoint[0].position);
 		}
 	}
-	[SerializeField] private Wander wander;
+	[SerializeField] protected Wander wander;
 #endregion Wander
 }
