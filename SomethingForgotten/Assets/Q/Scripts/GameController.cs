@@ -102,8 +102,8 @@ public class GameController : MonoBehaviour
 		Application.Quit();
 	}
 
-	public void PlayForgottenObjectGetSe()
+	public void PlaySe(SoundManager.SeType seType)
 	{
-		_soundManager.PlaySe(SoundManager.SeType.ForgottenObjectGet);
+		_soundManager.PlaySe(seType);
 	}
 }
