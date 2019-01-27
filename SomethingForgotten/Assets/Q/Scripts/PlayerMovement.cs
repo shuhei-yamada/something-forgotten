@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     Vector3 Movement;
     Rigidbody PlayerRigidbody;
 
+    [SerializeField] private GameObject _bone;
+
     void Start()
     {
         PlayerRigidbody = GetComponent<Rigidbody>();
@@ -34,13 +36,20 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         if(other.tag == "ForgottenObject")
         {
-			GameController.Instance.PlayForgottenObjectGetSe();
+			GameController.Instance.PlaySe(SoundManager.SeType.ForgottenObjectGet);
 			GetObjectNum++;
 			if(GetObjectNum >= GameController.Instance.MaxForGottenObject)
 			{
 				GameController.Instance.GameClear();
 			}
             Destroy(other.gameObject);
+        }
+
+        if (other.tag == "Bone2")
+        {
+			GameController.Instance.PlaySe(SoundManager.SeType.ItemGet);
+			_bone.SetActive(true);
+			Destroy(other.gameObject);
         }
     }
 }
