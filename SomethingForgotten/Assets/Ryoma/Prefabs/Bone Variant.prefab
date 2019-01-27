@@ -42,7 +42,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006173497052356, guid: 11be0398bf08b574c839d66a800c6174, type: 3}
       propertyPath: m_TagString
-      value: Bone
+      value: Bone2
       objectReference: {fileID: 0}
     - target: {fileID: 4090756587851024, guid: 11be0398bf08b574c839d66a800c6174, type: 3}
       propertyPath: m_LocalPosition.x

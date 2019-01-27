@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
             Destroy(other.gameObject);
         }
 
-        if (other.tag == "Bone")
+        if (other.tag == "Bone2")
         {
 			GameController.Instance.PlaySe(SoundManager.SeType.ItemGet);
 			_bone.SetActive(true);

@@ -1408,6 +1408,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveSpeed: 5
   _bone: {fileID: 3582839924316871444}
+--- !u!65 &1179237132826915665
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3582839924316871444}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: -1.2, z: -0.00000004470349}
 --- !u!1001 &3583562320537802704
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1422,6 +1435,10 @@ PrefabInstance:
     - target: {fileID: 1006173497052356, guid: 11be0398bf08b574c839d66a800c6174, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006173497052356, guid: 11be0398bf08b574c839d66a800c6174, type: 3}
+      propertyPath: m_TagString
+      value: Bone
       objectReference: {fileID: 0}
     - target: {fileID: 4090756587851024, guid: 11be0398bf08b574c839d66a800c6174, type: 3}
       propertyPath: m_LocalPosition.x
