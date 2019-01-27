@@ -243,6 +243,8 @@ public class EnemySearch : MonoBehaviour
 			// RequireComponentしてるので必ずある
 			navMeshAgent = transform.GetComponent<NavMeshAgent>();
 			if (navMeshAgent == null) { Debug.LogError(transform.name + " はnavMeshAgentがありません"); }
+
+			// Rigidbodyで動かすのでAgentによる更新を止める
 			navMeshAgent.updatePosition = false;
 			navMeshAgent.updateRotation = false;
 			navMeshAgent.updateUpAxis = false;

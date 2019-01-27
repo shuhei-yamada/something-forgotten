@@ -18,7 +18,7 @@ public class DogSearcher : EnemySearch
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if(other.tag != "Bone") { return; } // 骨以外では反応しない
+		if(other.name != "Bone") { return; }	// 骨以外では反応しない
 		if ( !raycastEnabled ) { return; }		// すでに骨に夢中になっていたら無視
 
 		// raycast をしばらく無効にする
