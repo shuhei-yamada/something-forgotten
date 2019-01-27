@@ -39,7 +39,7 @@ public class SoundManager : MonoBehaviour
 				_audioSource1.PlayOneShot(_itemGetAudioClip);
 				break;
 			case SeType.GameClear:
-				_audioSource2.PlayOneShot(_clearAudioClip);
+				_audioSource1.PlayOneShot(_clearAudioClip);
 				break;
 			case SeType.GameOver:
 				_audioSource2.PlayOneShot(_gameOverAudioClip);
